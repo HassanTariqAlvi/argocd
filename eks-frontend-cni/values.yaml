@@ -76,7 +76,7 @@ ingressroute:
   name: eks-frontend-ingressroute
   namespace: default  
   annotations:
-    ingressClass: traefik  
+    ingressClass: traefik-external  
   entryPoints:
     - web  
   routes:
