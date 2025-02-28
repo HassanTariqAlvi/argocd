@@ -15,8 +15,11 @@ ingressroute:
         - name: api@internal
           kind: TraefikService
 
+ingress:
+  enabled: false
 
 
 
-serviceAccount:
-  create: false
+
+
+
