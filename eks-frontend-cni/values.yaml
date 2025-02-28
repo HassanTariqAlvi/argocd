@@ -82,7 +82,7 @@ ingressroute:
   routes:
     - match: "Host(`abc.technoor.me`) && PathPrefix(`/`)"
       services:
-        - name: service-eks-frontend-cni  
+        - name: eks-frontend-cni  
           namespace: default  
           port: 5173  
   tls:
