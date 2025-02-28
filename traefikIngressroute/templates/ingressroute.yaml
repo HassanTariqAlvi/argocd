@@ -14,12 +14,12 @@ spec:
     - match: {{ .match | quote }}
       kind: {{ .kind }}
       services:
-      {{- if eq .services.kind "TraefikService" }}
-        - name: {{ .services.name }}
-          kind: TraefikService
-      {{- else }}
-        - name: {{ .services.name }}
-          port: {{ .services.port }}
+      {{- range .services }}
+        - name: {{ .name }}
+          kind: {{ .kind }}
+          {{- if .port }}
+          port: {{ .port }}
+          {{- end }}
       {{- end }}
   {{- end }}
 {{- end }}
