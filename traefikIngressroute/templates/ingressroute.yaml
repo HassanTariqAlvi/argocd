@@ -17,9 +17,6 @@ spec:
       {{- range .services }}
         - name: {{ .name }}
           kind: {{ .kind }}
-          {{- if .port }}
-          port: {{ .port }}
-          {{- end }}
       {{- end }}
   {{- end }}
 {{- end }}
