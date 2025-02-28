@@ -1,0 +1,136 @@
+# Default values for eks-frontend-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: hasniawan8/eks-frontend
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: "eks-frontend-cni"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # automount: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+envVars:
+  - name: VITE_BASE_URL
+    value: "https://aws.skyphonez.com.au"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 5173
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+traefikMiddleware:
+  enabled: false
+  middlewares:
+    httpHeaders:
+      name: "api-gateway-http-headers" # Ensure this name is correct and being used
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "http"
+
+
+ingressroute:
+  enabled: true  
+  name: eks-frontend-ingressroute
+  namespace: default  
+  annotations:
+    ingressClass: traefik  
+  entryPoints:
+    - web  
+  routes:
+    - match: "Host(`abc.technoor.me`) && PathPrefix(`/`)"
+      services:
+        - name: service-eks-frontend-cni  
+          namespace: default  
+          port: 5173  
+  tls:
+    secretName: ""  
+
+
+
+
+# resources: {}
+#   # We usually recommend not to specify default resources and to leave this as a conscious
+#   # choice for the user. This also increases chances charts run on environments with little
+#   # resources, such as Minikube. If you do want to specify resources, uncomment the following
+#   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# livenessProbe:
+#   httpGet:
+#     path: /swagger
+#     port: http
+#   initialDelaySeconds: 15
+#   periodSeconds: 10
+#   timeoutSeconds: 5
+#   successThreshold: 1
+#   failureThreshold: 3
+# readinessProbe:
+#   httpGet:
+#     path: /swagger
+#     port: http
+#   initialDelaySeconds: 15
+#   periodSeconds: 10
+#   timeoutSeconds: 5
+#   successThreshold: 1
+#   failureThreshold: 3

@@ -1,0 +1,17 @@
+{{- with .Values.traefikMiddleware }}
+{{- if .enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "api-gateway.fullname" $ }}-http-headers  # Note the $ to pass the root context
+  namespace: {{ $.Values.ingressroute.namespace }}
+  labels:
+    {{- include "api-gateway.labels" $ | nindent 4 }}  # Same here with the root context $
+spec:
+  headers:
+    customRequestHeaders:
+      {{- range $key, $value := .middlewares.httpHeaders.headers.customRequestHeaders }}
+      {{ $key }}: "{{ $value }}"
+      {{- end }}
+{{- end }}
+{{- end }}
