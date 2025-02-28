@@ -80,7 +80,7 @@ ingressroute:
   entryPoints:
     - web  
   routes:
-    - match: "Host(`abc.technoor.me`) && PathPrefix(`/`)"
+    - match: "Host(`xyz.technoor.me`) && PathPrefix(`/`)"
       services:
         - name: eks-frontend-cni  
           namespace: default  
