@@ -16,3 +16,7 @@ ingressroute:
           kind: TraefikService
 
 
+
+
+serviceAccount:
+  create: false
